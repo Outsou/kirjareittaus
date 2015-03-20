@@ -15,5 +15,22 @@
   <%= @book.author %>
 </p>
 
+<h4>Make a review:</h4>
+
+<%= form_for(@review) do |f| %>
+    <%= f.hidden_field :book_id %>
+    <div class="field">
+      <%= f.label :score %> <br>
+      <%= f.number_field :score %>
+    </div>
+    <div class="field">
+      <%= f.label :review %> <br>
+      <%= f.text_area :review %>
+    </div>
+    <div class="actions">
+        <%= f.submit class:"btn btn-primary" %>
+    </div>
+<% end %>
+
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %>
