@@ -1,5 +1,6 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :ensure_that_signed_in, except: [:index, :show]
 
   # GET /books
   # GET /books.json
@@ -10,8 +11,13 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.json
   def show
-    @review = Review.new
-    @review.book = @book
+    @reviews = @book.reviews
+
+    if not current_user.nil?
+      @review = Review.new
+      @review.book = @book
+      @review.user = current_user
+    end
   end
 
   # GET /books/new

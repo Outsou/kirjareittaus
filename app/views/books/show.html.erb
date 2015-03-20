@@ -15,22 +15,50 @@
   <%= @book.author %>
 </p>
 
-<h4>Make a review:</h4>
+<p>
+  <% if @book.reviews.empty? %>
+      Book has not yet been reviewed!
+  <% else %>
+      Has <%= "#{pluralize @book.reviews.count, "review"}" %>, average <%= @book.average_rating %>
+  <% end %>
+</p>
 
-<%= form_for(@review) do |f| %>
-    <%= f.hidden_field :book_id %>
-    <div class="field">
-      <%= f.label :score %> <br>
-      <%= f.number_field :score %>
-    </div>
-    <div class="field">
-      <%= f.label :review %> <br>
-      <%= f.text_area :review %>
-    </div>
-    <div class="actions">
-        <%= f.submit class:"btn btn-primary" %>
-    </div>
+<% if not current_user.nil? %>
+
+    <h4>Make a review:</h4>
+
+    <%= form_for(@review) do |f| %>
+        <%= f.hidden_field :book_id %>
+        <%= f.hidden_field :user_id %>
+        <div class="field">
+          <%= f.label :score %> <br>
+          <%= f.number_field :score %>
+        </div>
+        <div class="field">
+          <%= f.label :review %> <br>
+          <%= f.text_area :review %>
+        </div>
+        <div class="actions">
+            <%= f.submit class:"btn btn-primary" %>
+        </div>
+    <% end %>
+
 <% end %>
 
-<%= link_to 'Edit', edit_book_path(@book) %> |
-<%= link_to 'Back', books_path %>
+<p>
+    <strong>Reviews:</strong>
+    <ul class="list-group">
+      <% @reviews.each do |review| %>
+          <li class="list-group-item">
+            <%= link_to review.user.username, review.user %>: <br>
+            <%= review.review %> <br>
+            <%= review.score %>/5
+          </li>
+      <% end %>
+    </ul>
+</p>
+
+<p>
+    <%= link_to 'Edit', edit_book_path(@book) %> |
+    <%= link_to 'Back', books_path %>
+</p>
